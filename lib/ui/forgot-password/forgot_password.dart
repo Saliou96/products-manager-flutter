@@ -21,19 +21,14 @@ class ForgotPassword extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
-                  SizedBox(height: constraints.maxHeight * 0.1),
-                  Image.network(
-                    "https://i.postimg.cc/nz0YBQcH/Logo-light.png",
-                    height: 100,
-                  ),
-                  SizedBox(height: constraints.maxHeight * 0.1),
+                  SizedBox(height: screenHeight * 0.02),
+                  Image.asset('lib/assets/1.png', height: screenHeight * 0.2),
+                  SizedBox(height: screenHeight * 0.02),
                   Text(
                     "Réinitialisation du mot de passe",
-                    // style: Theme.of(context)
-                    //     .textTheme
-                    //     .headlineSmall!
-                    //     .copyWith(fontWeight: FontWeight.bold),
-                    style: TextStyle(fontSize: screenWidth * 0.05,fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: screenWidth * 0.05,
+                        fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: constraints.maxHeight * 0.05),
                   Form(
@@ -66,7 +61,7 @@ class ForgotPassword extends StatelessWidget {
                           },
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
-                            backgroundColor: const Color(0xFF00BF6D),
+                            backgroundColor: const Color(0xFF0E8ED7),
                             foregroundColor: Colors.white,
                             minimumSize: const Size(double.infinity, 48),
                             shape: const StadiumBorder(),
