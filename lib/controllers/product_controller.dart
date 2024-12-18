@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/product.dart';
 
@@ -22,16 +23,28 @@ class ProductController extends GetxController {
               Product.fromMap(doc.data() as Map<String, dynamic>, doc.id))
           .toList();
     } catch (e) {
-      Get.snackbar("Erreur", "Impossible de récupérer les produits : $e");
+      Get.snackbar(
+        "Erreur",
+        "Impossible de récupérer les produits : $e",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
     }
   }
 
   // Ajouter un produit
-  Future<void> addProduct(Product product) async {
+  void addProduct(Product product) async {
     try {
       await _firestore.collection('products').add(product.toMap());
-      Get.snackbar("Succès", "Produit ajouté avec succès");
       Get.back();
+      Get.snackbar(
+        "Succès",
+        "Produit ajouté avec succès",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
       fetchProducts(); // Rafraîchit la liste
     } catch (e) {
       Get.snackbar("Erreur", "Impossible d'ajouter le produit : $e");
@@ -39,17 +52,40 @@ class ProductController extends GetxController {
   }
 
   // Mettre à jour un produit
-  Future<void> updateProduct(Product product) async {
-    await _firestore
-        .collection('products')
-        .doc(product.id)
-        .update(product.toMap());
-    fetchProducts();
+  void updateProduct(Product product) async {
+    try {
+      await _firestore
+          .collection('products')
+          .doc(product.id)
+          .update(product.toMap());
+      Get.back();
+      Get.snackbar(
+        "Succès",
+        "Produit mis à jour!",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      fetchProducts();
+    } catch (e) {
+      Get.snackbar("Erreur", "Impossible de mettre à jour le produit : $e");
+    }
   }
 
   // Supprimer un produit
   Future<void> deleteProduct(String productId) async {
-    await _firestore.collection('products').doc(productId).delete();
-    fetchProducts();
+    try {
+      await _firestore.collection('products').doc(productId).delete();
+      Get.snackbar(
+        "Succès",
+        "Produit supprimé!",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      fetchProducts();
+    } catch (e) {
+      Get.snackbar("Erreur", "Impossible de supprimer le produit : $e");
+    }
   }
 }

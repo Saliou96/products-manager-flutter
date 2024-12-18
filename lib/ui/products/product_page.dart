@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:products_manager/controllers/login_controller.dart';
 import 'package:products_manager/controllers/product_controller.dart';
 import 'package:products_manager/models/product.dart';
 
 class ProductPage extends StatelessWidget {
   final ProductController productController = Get.put(ProductController());
+  final LoginController loginController = Get.put(LoginController());
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -79,43 +81,58 @@ class ProductPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Gestion des Produits'),
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
+        actions: [
+          IconButton(
+            onPressed: () {
+              loginController.logout();
+            },
+            icon: const Icon(Icons.logout),
+            color: Colors.redAccent,
+          ),
+        ],
       ),
       body: Obx(() {
-        return ListView.builder(
-          itemCount: productController.products.length,
-          itemBuilder: (context, index) {
-            final product = productController.products[index];
-            return Card(
-              margin: const EdgeInsets.all(8),
-              child: ListTile(
-                title: Text(product.name,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle:
-                    Text('${product.description}\nPrix: ${product.price}€'),
-                isThreeLine: true,
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.blue),
-                      onPressed: () => showProductDialog(product: product),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () =>
-                          productController.deleteProduct(product.id),
-                    ),
-                  ],
-                ),
-              ),
-            );
+        return RefreshIndicator(
+          onRefresh: () async {
+            productController
+                .fetchProducts(); // Appelle une méthode pour actualiser
           },
+          child: ListView.builder(
+            itemCount: productController.products.length,
+            itemBuilder: (context, index) {
+              final product = productController.products[index];
+              return Card(
+                margin: const EdgeInsets.all(8),
+                child: ListTile(
+                  title: Text(product.name,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle:
+                      Text('${product.description}\nPrix: ${product.price}€'),
+                  isThreeLine: true,
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit, color: Color(0xFF0E8ED7)),
+                        onPressed: () => showProductDialog(product: product),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                        onPressed: () =>
+                            productController.deleteProduct(product.id),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
         );
       }),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showProductDialog(product: null),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xFF0E8ED7),
         child: const Icon(Icons.add),
       ),
     );
